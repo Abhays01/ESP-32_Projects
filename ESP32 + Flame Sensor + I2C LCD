@@ -1,0 +1,43 @@
+from machine import Pin, I2C
+import time
+from lcd_api import LcdApi
+from i2c_lcd import I2cLcd
+
+# I2C configuration
+I2C_SCL = 22
+I2C_SDA = 21
+
+# Initialize I2C
+i2c = I2C(0, scl=Pin(I2C_SCL), sda=Pin(I2C_SDA), freq=400000)
+devices = i2c.scan()
+
+if not devices:
+    print("❌ No I2C device found. Check wiring.")
+    raise Exception("I2C device not found")
+
+# Assume the first detected address is the LCD
+lcd_addr = devices[0]
+print("✅ I2C LCD found at address:", hex(lcd_addr))
+
+# Initialize LCD
+lcd = I2cLcd(i2c, lcd_addr, 2, 16)
+lcd.clear()
+lcd.putstr("Flame Sensor Active")
+time.sleep(2)
+lcd.clear()
+
+# Setup Flame sensor
+flame = Pin(13, Pin.IN)
+
+# Main loop
+while True:
+    if flame.value() == 0:
+        status = " Flame Detected"
+    else:
+        status = " No Flame"
+
+    lcd.clear()
+    lcd.putstr(status)
+    print(status)
+    time.sleep(1)
+
