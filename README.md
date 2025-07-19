@@ -6,5 +6,5 @@ This repository contains a collection of simple and practical projects built usi
 
 - Bluetooth Controlled RC Car  
 - Gas and Flame Detection System
-
+- ESP32 + Flame Sensor + I2C LCD
 
